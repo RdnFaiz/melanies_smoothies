@@ -54,4 +54,3 @@ if nutrition_rows:
     st.json(nutrition_rows[0]["PAYLOAD"])
 else:
     st.warning("No nutrition data yet. Load it into SMOOTHIES.PUBLIC.FRUIT_NUTRITION first.")
-``
