@@ -37,6 +37,21 @@ if ingredients_list:
        session.sql(my_insert_stmt).collect()
        st.success('Your Smoothie is ordered,'+name_on_order, icon="✅")
 # New section to display smoothiefruit nutrition information
-import requests
-smoothiefruit_response = requests.get("https://my.smoothiefruit.com/api/fruit/watermelon")
-st.text(smoothiefruit_response.json())
+#import requests
+#smoothiefruit_response = requests.get("https://my.smoothiefruit.com/api/fruit/watermelon")
+#st.text(smoothiefruit_response.json())
+# New section to display smoothiefruit nutrition information (from Snowflake table)
+nutrition_rows = (
+    session.table("SMOOTHIES.PUBLIC.FRUIT_NUTRITION")
+    .filter(col("FRUIT") == "watermelon")
+    .sort(col("LOADED_AT").desc())
+    .limit(1)
+    .collect()
+)
+
+if nutrition_rows:
+    st.subheader("Nutrition (watermelon)")
+    st.json(nutrition_rows[0]["PAYLOAD"])
+else:
+    st.warning("No nutrition data yet. Load it into SMOOTHIES.PUBLIC.FRUIT_NUTRITION first.")
+``
